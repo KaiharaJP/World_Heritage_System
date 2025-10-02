@@ -1,0 +1,27 @@
+services:
+  frontend:
+    build: ./frontend
+    working_dir: /app
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_TELEMETRY_DISABLED=1
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: sh -lc "npm ci && npm run dev"
+  backend:
+    build: ./backend
+    working_dir: /app
+    ports:
+      - "8000:8000"
+    environment:
+      - UVICORN_WORKERS=1
+      - IMAGE_BASE_URL=http://backend:8000
+    volumes:
+      - ./backend:/app
+      - ./data:/app/data
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
