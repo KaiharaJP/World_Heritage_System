@@ -7,7 +7,7 @@ from fastapi import APIRouter, HTTPException, Request
 
 router = APIRouter(prefix="/quiz", tags=["quiz"])
 
-CSV_PATH = os.environ.get("CSV_PATH", "/app/data/csv/world_heritage.csv")
+CSV_PATH = os.environ.get("CSV_PATH", "data\csv\world_heritage.csv")
 IMAGE_URL_PREFIX = "/images"
 IMAGE_BASE_URL = os.environ.get("IMAGE_BASE_URL")
 
@@ -23,6 +23,7 @@ def _load_dataset() -> List[Dict[str, str]]:
 		for row in reader:
 			name = (row.get("name") or "").strip()
 			image_path_raw = (row.get("image_pass") or row.get("image_path") or "").strip()
+			country_name = (row.get("country_name") or "").strip()
 			if not name or not image_path_raw:
 				continue
 			# CSV が Windows 形式の区切りでも動くように正規化
@@ -33,6 +34,7 @@ def _load_dataset() -> List[Dict[str, str]]:
 				"name": name,
 				"image_url": image_url,
 				"filename": filename,
+				"country_name":country_name
 			})
 	return entries
 
@@ -57,7 +59,7 @@ def get_quiz(request: Request):
 	base = (IMAGE_BASE_URL or str(request.base_url)).rstrip("/")
 	image_url = f"{base}{IMAGE_URL_PREFIX}/{answer_entry['filename']}"
 	return {
-		"question": "この世界遺産は何でしょう？",
+		"question": "この世界遺産は何でしょう？　国名:"+answer_entry["country_name"],
 		"image_url": image_url,
 		"options": options,
 		"answer": answer_entry["name"],

@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from app.routes.quiz import router as quiz_router
+from .routes.quiz import router as quiz_router
 
 app = FastAPI(title="World Heritage Backend")
 
@@ -16,7 +16,7 @@ app.add_middleware(
 )
 
 # 静的配信: /images -> /app/data/images (compose でマウント済み)
-app.mount("/images", StaticFiles(directory="/app/data/images"), name="images")
+app.mount("/images", StaticFiles(directory="data/images"), name="images")
 
 app.include_router(quiz_router)
 
