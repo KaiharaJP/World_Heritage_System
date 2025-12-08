@@ -58,7 +58,7 @@ export default function ChatPage() {
 			<header className="border-b px-4 py-3 sticky top-0 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-10">
 				<div className="max-w-3xl mx-auto flex items-center justify-between">
 					<h1 className="font-semibold">世界遺産クイズ</h1>
-					<div className="text-xs text-muted-foreground">ChatGPT風インターフェース</div>
+					<div className="text-xs text-muted-foreground">作者：ららかちゃん</div>
 				</div>
 			</header>
 			<main className="flex-1">
