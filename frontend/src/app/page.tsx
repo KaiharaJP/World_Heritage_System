@@ -17,6 +17,14 @@ export default function ChatPage() {
 	const [loading, setLoading] = useState(false);
 	const [answer, setAnswer] = useState("");
 
+	const seenQuizIds = useMemo(() => {
+		const ids: string[] = [];
+		for (const m of messages) {
+			if (m.role === "quiz" && m.content?.id) ids.push(m.content.id);
+		}
+		return ids;
+	}, [messages]);
+
 	const lastQuiz = useMemo(() => {
 		for (let i = messages.length - 1; i >= 0; i--) {
 			const m = messages[i];
@@ -28,7 +36,7 @@ export default function ChatPage() {
 	async function handleFetchQuiz() {
 		try {
 			setLoading(true);
-			const q = await fetchQuiz();
+			const q = await fetchQuiz(seenQuizIds);
 			setMessages((prev) => [...prev, { role: "quiz", content: q }]);
 			setAnswer("");
 		} catch (err) {
